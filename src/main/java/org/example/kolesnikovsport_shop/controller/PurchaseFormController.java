@@ -1,42 +1,75 @@
 package org.example.kolesnikovsport_shop.controller;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import org.example.kolesnikovsport_shop.model.entity.Customer;
+import org.example.kolesnikovsport_shop.model.entity.Equipment;
+import org.example.kolesnikovsport_shop.service.CustomerService;
+import org.example.kolesnikovsport_shop.service.EquipmentService;
 import org.example.kolesnikovsport_shop.service.FormService;
 import org.example.kolesnikovsport_shop.service.PurchaseService;
 import org.springframework.stereotype.Component;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+
 @Component
-public class PurchaseFormController {
+public class PurchaseFormController implements Initializable {
 
     private final PurchaseService purchaseService;
     private final FormService formService;
+    private final CustomerService customerService;
+    private final EquipmentService equipmentService;
 
     @FXML
-    private TextField tfCustomerId;
+    private ComboBox<Customer> cbCustomer;
     @FXML
-    private TextField tfEquipmentId;
+    private ComboBox<Equipment> cbEquipment;
     @FXML
     private TextField tfQuantity;
     @FXML
     private Label lblPurchaseResult;
 
-    public PurchaseFormController(PurchaseService purchaseService, FormService formService) {
+    // Конструктор с внедрением зависимостей через Spring
+    public PurchaseFormController(PurchaseService purchaseService,
+                                  FormService formService,
+                                  CustomerService customerService,
+                                  EquipmentService equipmentService) {
         this.purchaseService = purchaseService;
         this.formService = formService;
+        this.customerService = customerService;
+        this.equipmentService = equipmentService;
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        // Заполняем ComboBox списком покупателей и товаров
+        cbCustomer.setItems(FXCollections.observableArrayList(customerService.getAllCustomers()));
+        cbEquipment.setItems(FXCollections.observableArrayList(equipmentService.getAllEquipment()));
+
     }
 
     @FXML
     private void handlePurchase() {
         try {
-            Long customerId = Long.parseLong(tfCustomerId.getText().trim());
-            Long equipmentId = Long.parseLong(tfEquipmentId.getText().trim());
+            Customer customer = cbCustomer.getSelectionModel().getSelectedItem();
+            Equipment equipment = cbEquipment.getSelectionModel().getSelectedItem();
             int quantity = Integer.parseInt(tfQuantity.getText().trim());
-            String result = purchaseService.buyEquipment(customerId, equipmentId, quantity);
+
+            if (customer == null || equipment == null) {
+                lblPurchaseResult.setText("Выберите покупателя и товар!");
+                return;
+            }
+
+            // Вызываем метод покупки, который должен обновить баланс покупателя и количество товара
+            String result = purchaseService.buyEquipment(customer.getId(), equipment.getId(), quantity);
             lblPurchaseResult.setText(result);
         } catch (NumberFormatException e) {
-            lblPurchaseResult.setText("Неверный формат чисел!");
+            lblPurchaseResult.setText("Неверный формат количества!");
         }
     }
 

@@ -13,7 +13,6 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.example.kolesnikovsport_shop.controller.NewCustomerFormController"
       alignment="CENTER" spacing="10" style="-fx-padding: 20;">
-
     <children>
         <Label text="Создание нового покупателя" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
 
@@ -45,14 +44,13 @@
             </children>
         </HBox>
 
-        <!-- Если хотите сразу задать баланс, можно добавить ещё одно поле:
+        <!-- Добавлено поле для ввода баланса -->
         <HBox spacing="10">
             <children>
                 <Label text="Баланс:"/>
                 <TextField fx:id="tfBalance"/>
             </children>
         </HBox>
-        -->
 
         <HBox spacing="10">
             <children>
@@ -61,7 +59,6 @@
             </children>
         </HBox>
     </children>
-
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
     </padding>
