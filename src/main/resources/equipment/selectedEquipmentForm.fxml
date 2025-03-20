@@ -30,6 +30,6 @@
     <Label text="В наличии:" style="-fx-font-weight: bold;"/>
     <Label fx:id="stockLabel"/>
 
-    <Button fx:id="buyEquipmentButton" text="Купить" onAction="#handleBuyEquipment"/>
-    <Button fx:id="returnEquipmentButton" text="Вернуть" onAction="#handleReturnEquipment"/>
+
+
 </VBox>

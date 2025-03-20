@@ -1,12 +1,14 @@
 package org.example.kolesnikovsport_shop.service;
 
+import javafx.scene.control.Alert;
 import org.example.kolesnikovsport_shop.KolesnikovSportShopApplication;
+import org.example.kolesnikovsport_shop.controller.EditCustomerFormController;
 import org.example.kolesnikovsport_shop.controller.EditEquipmentFormController;
 import org.example.kolesnikovsport_shop.controller.EditSupplierFormController;
 import org.example.kolesnikovsport_shop.controller.SelectedEquipmentFormController;
+import org.example.kolesnikovsport_shop.model.entity.Customer;
 import org.example.kolesnikovsport_shop.model.entity.Equipment;
 import org.example.kolesnikovsport_shop.model.entity.Supplier;
-import org.example.kolesnikovsport_shop.model.entity.Customer;
 import org.example.kolesnikovsport_shop.tools.SpringFXMLLoader;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,6 +17,8 @@ import javafx.stage.Stage;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+
+import static org.example.kolesnikovsport_shop.KolesnikovSportShopApplication.applicationContext;
 
 @Service
 public class FormService {
@@ -273,5 +277,29 @@ public class FormService {
         getPrimaryStage().centerOnScreen();
         getPrimaryStage().show();
     }
+
+
+    public void loadEditCustomerForm(Customer selectedCustomer) {
+        FXMLLoader fxmlLoader = springFXMLLoader.load("/customer/editCustomerForm.fxml");
+
+        // Получаем контроллер
+        EditCustomerFormController controller = fxmlLoader.getController();
+
+        if (controller != null) {
+            controller.setCustomer(selectedCustomer);  // Устанавливаем покупателя
+            Parent root = fxmlLoader.getRoot();  // Загружаем корень
+            Scene scene = new Scene(root);
+            getPrimaryStage().setTitle("Редактирование покупателя");
+            getPrimaryStage().setScene(scene);
+            getPrimaryStage().setResizable(false);
+            getPrimaryStage().centerOnScreen();
+            getPrimaryStage().show();
+        } else {
+            throw new RuntimeException("Контроллер не был инициализирован правильно.");
+        }
+
+    }
 }
+
+
 

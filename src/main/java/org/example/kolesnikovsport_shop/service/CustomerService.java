@@ -10,7 +10,9 @@ import java.util.Optional;
 @Service
 public class CustomerService {
     public static Customer currentCustomer;
+
     public enum ROLES { CUSTOMER, MANAGER, ADMINISTRATOR }
+
     private final CustomerRepository repository;
 
     public CustomerService(CustomerRepository repository) {
@@ -27,7 +29,6 @@ public class CustomerService {
         admin.setPassword("12345");
         admin.setFirstname("Admin");
         admin.setLastname("SuperAdmin");
-        // Устанавливаем баланс для администратора, например, 0.0
         admin.setBalance(0.0);
         admin.getRoles().add(ROLES.ADMINISTRATOR.toString());
         admin.getRoles().add(ROLES.CUSTOMER.toString());
@@ -36,20 +37,19 @@ public class CustomerService {
     }
 
     public void add(Customer customer) {
+        customer.getRoles().clear();
+        customer.getRoles().add(ROLES.CUSTOMER.toString());
         repository.save(customer);
     }
 
-    // Метод для обновления данных покупателя
     public Customer update(Customer customer) {
         return repository.save(customer);
     }
 
-    // Метод для получения списка всех покупателей
     public List<Customer> getAllCustomers() {
         return repository.findAll();
     }
 
-    // Метод для поиска покупателя по ID
     public Optional<Customer> findById(Long id) {
         return repository.findById(id);
     }
@@ -66,4 +66,26 @@ public class CustomerService {
         currentCustomer = loginCustomer;
         return true;
     }
+
+    // --- ВАЖНО: статические методы для проверки ролей ---
+    public static boolean currentUserHasRole(ROLES role) {
+        if (currentCustomer == null) {
+            return false;
+        }
+        return currentCustomer.getRoles().contains(role.toString());
+    }
+
+    public static boolean currentUserHasAnyRole(ROLES... roles) {
+        if (currentCustomer == null) {
+            return false;
+        }
+        for (ROLES role : roles) {
+            if (currentCustomer.getRoles().contains(role.toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
+
+

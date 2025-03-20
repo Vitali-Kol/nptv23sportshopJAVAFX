@@ -1,5 +1,6 @@
 package org.example.kolesnikovsport_shop.controller;
 
+import javafx.scene.control.Alert;
 import org.example.kolesnikovsport_shop.service.CustomerService;
 import org.example.kolesnikovsport_shop.service.FormService;
 import javafx.fxml.FXML;
@@ -14,25 +15,36 @@ import java.util.ResourceBundle;
 public class MenuFormController implements Initializable {
 
     private final FormService formService;
+    private final CustomerService customerService;
 
     @FXML
     private Menu menuAdministrator; // привязка к fx:id="menuAdministrator"
 
-    public MenuFormController(FormService formService) {
+    public MenuFormController(FormService formService, CustomerService customerService) {
         this.formService = formService;
+        this.customerService = customerService;
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Проверяем, вошёл ли текущий пользователь и есть ли у него роль ADMINISTRATOR
-        if (CustomerService.currentCustomer == null ||
-                !CustomerService.currentCustomer.getRoles().contains("ADMINISTRATOR")) {
+        // Если текущий пользователь не администратор, скрываем админское меню
+        if (!customerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
             menuAdministrator.setVisible(false);
         }
     }
 
     @FXML
     private void showEquipmentForm() {
+        if (!CustomerService.currentUserHasAnyRole(
+                CustomerService.ROLES.MANAGER,
+                CustomerService.ROLES.ADMINISTRATOR)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Доступ запрещён");
+            alert.setHeaderText("Недостаточно прав");
+            alert.setContentText("У вас нет прав на добавление оборудования!");
+            alert.showAndWait();
+            return;
+        }
         formService.loadNewEquipmentForm();
     }
 
@@ -43,6 +55,16 @@ public class MenuFormController implements Initializable {
 
     @FXML
     private void showSupplierForm() {
+        if (!CustomerService.currentUserHasAnyRole(
+                CustomerService.ROLES.MANAGER,
+                CustomerService.ROLES.ADMINISTRATOR)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Доступ запрещён");
+            alert.setHeaderText("Недостаточно прав");
+            alert.setContentText("У вас нет прав на добавление поставщиков!");
+            alert.showAndWait();
+            return;
+        }
         formService.loadSupplierForm();
     }
 
@@ -53,6 +75,16 @@ public class MenuFormController implements Initializable {
 
     @FXML
     private void showNewCustomerForm() {
+        if (!CustomerService.currentUserHasAnyRole(
+                CustomerService.ROLES.MANAGER,
+                CustomerService.ROLES.ADMINISTRATOR)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Доступ запрещён");
+            alert.setHeaderText("Недостаточно прав");
+            alert.setContentText("У вас нет прав на добавление покупателя!");
+            alert.showAndWait();
+            return;
+        }
         formService.loadNewCustomerForm();
     }
 
@@ -77,19 +109,41 @@ public class MenuFormController implements Initializable {
         formService.loadLoginForm();
     }
 
-    // Новые пункты меню для покупки, дохода и рейтинга товаров:
+    // Ограничиваем доступ к форме покупки, дохода и рейтинга товаров
+
     @FXML
     private void showPurchaseForm() {
+        // Функция покупки доступна всем, поэтому проверка не нужна
         formService.loadPurchaseForm();
     }
 
     @FXML
     private void showIncomeForm() {
+        if (!CustomerService.currentUserHasAnyRole(
+                CustomerService.ROLES.MANAGER,
+                CustomerService.ROLES.ADMINISTRATOR)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Доступ запрещён");
+            alert.setHeaderText("Недостаточно прав");
+            alert.setContentText("У вас нет прав на просмотр дохода магазина!");
+            alert.showAndWait();
+            return;
+        }
         formService.loadIncomeForm();
     }
 
     @FXML
     private void showRatingForm() {
+        if (!CustomerService.currentUserHasAnyRole(
+                CustomerService.ROLES.MANAGER,
+                CustomerService.ROLES.ADMINISTRATOR)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Доступ запрещён");
+            alert.setHeaderText("Недостаточно прав");
+            alert.setContentText("У вас нет прав на просмотр рейтинга товаров!");
+            alert.showAndWait();
+            return;
+        }
         formService.loadRatingForm();
     }
 }

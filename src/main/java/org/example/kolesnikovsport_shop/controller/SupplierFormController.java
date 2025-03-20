@@ -1,6 +1,7 @@
 package org.example.kolesnikovsport_shop.controller;
 
 import org.example.kolesnikovsport_shop.model.entity.Supplier;
+import org.example.kolesnikovsport_shop.service.CustomerService;
 import org.example.kolesnikovsport_shop.service.SupplierService;
 import org.example.kolesnikovsport_shop.service.FormService;
 import javafx.fxml.FXML;
@@ -18,6 +19,7 @@ public class SupplierFormController implements Initializable {
 
     private final FormService formService;
     private final SupplierService supplierService;
+    private final CustomerService customerService;
 
     @FXML
     private TextField tfName;
@@ -25,9 +27,10 @@ public class SupplierFormController implements Initializable {
     @FXML
     private TextField tfContact; // например, телефон или email
 
-    public SupplierFormController(FormService formService, SupplierService supplierService) {
+    public SupplierFormController(FormService formService, SupplierService supplierService, CustomerService customerService) {
         this.formService = formService;
         this.supplierService = supplierService;
+        this.customerService = customerService;
     }
 
     @FXML
@@ -61,6 +64,19 @@ public class SupplierFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Инициализация, если требуется
+        // Если текущий пользователь не менеджер и не админ,
+        // запрещаем добавлять поставщиков
+        if (!CustomerService.currentUserHasAnyRole(
+                CustomerService.ROLES.MANAGER,
+                CustomerService.ROLES.ADMINISTRATOR)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Доступ запрещён");
+            alert.setHeaderText("Недостаточно прав");
+            alert.setContentText("У вас нет прав на добавление поставщиков!");
+            alert.showAndWait();
+
+            // Возвращаемся в главное меню
+            formService.loadMainForm();
+        }
     }
 }

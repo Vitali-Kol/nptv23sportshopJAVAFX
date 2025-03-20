@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SpringFXMLLoader {
-
     private final ApplicationContext applicationContext;
 
     public SpringFXMLLoader(ApplicationContext applicationContext) {
@@ -15,7 +14,9 @@ public class SpringFXMLLoader {
 
     public FXMLLoader load(String fxmlPath) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath));
-        fxmlLoader.setControllerFactory(applicationContext::getBean);
+        fxmlLoader.setControllerFactory(applicationContext::getBean); // Получение контроллера через Spring
         return fxmlLoader;
     }
 }
+
+

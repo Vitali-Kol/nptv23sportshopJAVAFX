@@ -20,5 +20,6 @@
             </columns>
         </TableView>
         <Button text="Главная" onAction="#goToMainForm"/>
+        <Button fx:id="editCustomerButton" text="Редактировать" onAction="#editCustomer" />
     </children>
 </VBox>
