@@ -1,6 +1,8 @@
 package org.example.kolesnikovsport_shop.controller;
 
+import javafx.scene.control.Alert;
 import org.example.kolesnikovsport_shop.model.entity.Equipment;
+import org.example.kolesnikovsport_shop.service.CustomerService;
 import org.example.kolesnikovsport_shop.service.EquipmentService;
 import org.example.kolesnikovsport_shop.service.FormService;
 import javafx.beans.property.SimpleStringProperty;
@@ -56,10 +58,25 @@ public class MainFormController implements Initializable {
         this.equipmentService = equipmentService;
     }
 
-    // Открытие окна редактирования оборудования
     @FXML
     private void showEditEquipmentForm() {
-        formService.loadEditEquipmentForm(tvEquipmentList.getSelectionModel().getSelectedItem());
+        // Проверяем, имеет ли текущий пользователь роль администратора
+        if (!CustomerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
+            // Если нет – выводим окно с сообщением об ошибке
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка доступа");
+            alert.setHeaderText("Редактирование запрещено");
+            alert.setContentText("У вас нет прав для редактирования оборудования.");
+            alert.showAndWait();
+            return;
+        }
+
+        Equipment selectedEquipment = tvEquipmentList.getSelectionModel().getSelectedItem();
+        if (selectedEquipment != null) {
+            formService.loadEditEquipmentForm(selectedEquipment);
+        } else {
+            System.out.println("Оборудование не выбрано!");
+        }
     }
 
     // Открытие окна с подробной информацией о выбранном оборудовании
@@ -76,6 +93,16 @@ public class MainFormController implements Initializable {
     // Новый метод для удаления выбранного оборудования
     @FXML
     private void deleteSelectedEquipment() {
+        // Если текущий пользователь не администратор – выводим сообщение об ошибке
+        if (!CustomerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка доступа");
+            alert.setHeaderText("Удаление запрещено");
+            alert.setContentText("У вас нет прав для удаления оборудования.");
+            alert.showAndWait();
+            return;
+        }
+
         Equipment selectedEquipment = tvEquipmentList.getSelectionModel().getSelectedItem();
         if (selectedEquipment != null) {
             equipmentService.delete(selectedEquipment.getId());

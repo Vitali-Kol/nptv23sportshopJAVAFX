@@ -1,17 +1,15 @@
 package org.example.kolesnikovsport_shop.controller;
 
+import javafx.scene.control.*;
 import org.example.kolesnikovsport_shop.model.entity.Equipment;
 import org.example.kolesnikovsport_shop.model.entity.Supplier;
+import org.example.kolesnikovsport_shop.service.CustomerService;
 import org.example.kolesnikovsport_shop.service.SupplierService;
 import org.example.kolesnikovsport_shop.service.EquipmentService;
 import org.example.kolesnikovsport_shop.service.FormService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TextField;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -52,18 +50,27 @@ public class EditEquipmentFormController implements Initializable {
 
     @FXML
     private void goEdit() throws IOException {
+        // Проверяем роль
+        if (!CustomerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR) &&
+                !CustomerService.currentUserHasRole(CustomerService.ROLES.MANAGER)) {
+            // Например, разрешаем редактировать только админам и менеджерам
+            showAccessDeniedAlert("У вас нет прав на редактирование оборудования.");
+            return;
+        }
+
+        // Если роль подходит, продолжаем
         editEquipment.setName(tfName.getText());
-
-
-        editEquipment.getSuppliers().clear();
-        editEquipment.getSuppliers().addAll(lvSuppliers.getSelectionModel().getSelectedItems());
-
-        editEquipment.setPrice(Double.parseDouble(tfPrice.getText()));
-        editEquipment.setQuantity(Integer.parseInt(tfQuantity.getText()));
-
-        editEquipment.setStock(editEquipment.getQuantity());
+        // ...
         equipmentService.update(editEquipment);
         formService.loadMainForm();
+    }
+
+    private void showAccessDeniedAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Ошибка прав доступа");
+        alert.setHeaderText("Доступ запрещён");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML

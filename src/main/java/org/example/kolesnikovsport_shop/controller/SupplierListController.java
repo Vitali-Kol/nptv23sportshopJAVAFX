@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.example.kolesnikovsport_shop.model.entity.Supplier;
+import org.example.kolesnikovsport_shop.service.CustomerService;
 import org.example.kolesnikovsport_shop.service.FormService;
 import org.example.kolesnikovsport_shop.service.SupplierService;
 import org.springframework.stereotype.Component;
@@ -52,6 +53,10 @@ public class SupplierListController implements Initializable {
 
     @FXML
     private void editSelectedSupplier() {
+        if (!CustomerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
+            showAccessDeniedAlert("У вас нет прав для редактирования поставщика.");
+            return;
+        }
         Supplier selectedSupplier = tvSupplierList.getSelectionModel().getSelectedItem();
         if (selectedSupplier != null) {
             formService.loadEditSupplierForm(selectedSupplier);
@@ -59,4 +64,13 @@ public class SupplierListController implements Initializable {
             System.out.println("Поставщик не выбран!");
         }
     }
+
+    private void showAccessDeniedAlert(String message) {
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+        alert.setTitle("Ошибка доступа");
+        alert.setHeaderText("Редактирование запрещено");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
 }

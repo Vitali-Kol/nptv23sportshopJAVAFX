@@ -12,15 +12,11 @@
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.example.kolesnikovsport_shop.controller.RatingFormController"
       spacing="10" alignment="CENTER" style="-fx-padding: 20;">
-
     <children>
         <Label text="Рейтинг продаваемости товаров" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
 
-        <!-- Пустой ComboBox, без items -->
         <ComboBox fx:id="cbPeriodType" prefWidth="200"/>
-
-        <Label text="Введите значение (если применимо):"/>
-        <TextField fx:id="tfPeriodValue" prefWidth="200"/>
+        <TextField fx:id="tfPeriodValue" prefWidth="200" promptText="Введите значение (например, 2025 или 3)"/>
 
         <Button text="Посчитать рейтинг" onAction="#handleCalculateRating"/>
         <Button text="Главная" onAction="#goToMainForm"/>

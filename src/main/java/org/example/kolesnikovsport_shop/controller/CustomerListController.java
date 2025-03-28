@@ -62,18 +62,20 @@ public class CustomerListController implements Initializable {
         tcBalance.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getBalance())));
 
-        // Делаем кнопку редактирования доступной только для администраторов
-        if (!customerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
-            editCustomerButton.setDisable(true);  // Отключаем кнопку для обычных пользователей
-        }
+
     }
 
     // Метод для редактирования покупателя
     @FXML
     private void editCustomer() {
+        // Если текущий пользователь не администратор, показываем сообщение об ошибке
+        if (!customerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
+            showAccessDeniedAlert("У вас нет доступа к редактированию покупателей.");
+            return;
+        }
+
         Customer selectedCustomer = tvCustomerList.getSelectionModel().getSelectedItem();
         if (selectedCustomer != null) {
-            // Передаем выбранного покупателя в метод загрузки формы редактирования
             formService.loadEditCustomerForm(selectedCustomer);
         } else {
             showAccessDeniedAlert("Пожалуйста, выберите покупателя для редактирования.");

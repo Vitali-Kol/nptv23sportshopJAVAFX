@@ -6,6 +6,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.example.kolesnikovsport_shop.model.entity.Customer;
 import org.example.kolesnikovsport_shop.service.CustomerService;
+import org.example.kolesnikovsport_shop.service.FormService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,20 +23,22 @@ public class EditCustomerFormController {
     private TextField balanceField;
 
     private final CustomerService customerService;
+    private final FormService formService; // добавляем зависимость на FormService
     private Customer customer;
 
-    @Autowired  // Инжекция зависимости
-    public EditCustomerFormController(CustomerService customerService) {
+    @Autowired
+    public EditCustomerFormController(CustomerService customerService, FormService formService) {
         this.customerService = customerService;
+        this.formService = formService;
     }
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-        if (customer != null) {
-            firstnameField.setText(customer.getFirstname());
-            lastnameField.setText(customer.getLastname());
-            usernameField.setText(customer.getUsername());
-            balanceField.setText(String.valueOf(customer.getBalance()));
+        // Если текущий пользователь не администратор, выбросим ошибку или сразу вернёмся к списку
+        if (!CustomerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
+            showError("У вас нет прав на редактирование покупателя!");
+            formService.loadCustomerListForm();
+            return;
         }
     }
 
@@ -54,15 +57,24 @@ public class EditCustomerFormController {
                 return;
             }
 
-            customerService.update(customer);
-            showSuccess("Покупатель успешно обновлен!");
+            try {
+                customerService.update(customer);
+                showSuccess("Покупатель успешно обновлен!");
+                formService.loadCustomerListForm(); // возвращаемся к списку покупателей
+            } catch (Exception e) {
+                // Можно дополнительно обработать DataIntegrityViolationException и вывести понятное сообщение
+                showError("Ошибка обновления: " + e.getMessage());
+            }
         }
     }
 
     @FXML
     private void cancelEdit() {
-        // Закрытие окна
-        closeWindow();
+        // Если нужно вернуться к списку покупателей:
+        formService.loadCustomerListForm();
+        // Если же нужно просто закрыть текущее окно, можно использовать:
+        // Stage currentStage = (Stage) firstnameField.getScene().getWindow();
+        // currentStage.close();
     }
 
     private void showError(String message) {
@@ -79,12 +91,6 @@ public class EditCustomerFormController {
         alert.setHeaderText("Операция выполнена успешно");
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    private void closeWindow() {
-        // Закрытие окна
-        // Stage currentStage = (Stage) someNode.getScene().getWindow();
-        // currentStage.close();
     }
 }
 

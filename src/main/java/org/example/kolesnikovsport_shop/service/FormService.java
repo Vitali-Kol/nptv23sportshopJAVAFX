@@ -282,12 +282,17 @@ public class FormService {
     public void loadEditCustomerForm(Customer selectedCustomer) {
         FXMLLoader fxmlLoader = springFXMLLoader.load("/customer/editCustomerForm.fxml");
 
-        // Получаем контроллер
+        Parent root;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         EditCustomerFormController controller = fxmlLoader.getController();
 
         if (controller != null) {
-            controller.setCustomer(selectedCustomer);  // Устанавливаем покупателя
-            Parent root = fxmlLoader.getRoot();  // Загружаем корень
+            controller.setCustomer(selectedCustomer);
             Scene scene = new Scene(root);
             getPrimaryStage().setTitle("Редактирование покупателя");
             getPrimaryStage().setScene(scene);
@@ -297,7 +302,6 @@ public class FormService {
         } else {
             throw new RuntimeException("Контроллер не был инициализирован правильно.");
         }
-
     }
 }
 

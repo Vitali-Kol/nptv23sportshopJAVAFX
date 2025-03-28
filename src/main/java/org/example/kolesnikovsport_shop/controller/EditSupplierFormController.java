@@ -1,8 +1,10 @@
 package org.example.kolesnikovsport_shop.controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import org.example.kolesnikovsport_shop.model.entity.Supplier;
+import org.example.kolesnikovsport_shop.service.CustomerService;
 import org.example.kolesnikovsport_shop.service.FormService;
 import org.example.kolesnikovsport_shop.service.SupplierService;
 import org.springframework.stereotype.Component;
@@ -46,15 +48,26 @@ public class EditSupplierFormController {
 
     @FXML
     private void saveSupplier() throws IOException {
-        // Обновляем данные поставщика
+        // Проверяем роль
+        if (!CustomerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR) &&
+                !CustomerService.currentUserHasRole(CustomerService.ROLES.MANAGER)) {
+            showAccessDeniedAlert("У вас нет прав на редактирование поставщика.");
+            return;
+        }
+
+        // Если всё ок, продолжаем
         editSupplier.setName(tfName.getText());
         editSupplier.setContact(tfContact.getText());
-
-        // Вызываем метод обновления в сервисе
         supplierService.updateSupplier(editSupplier);
-
-        // Возвращаемся к списку поставщиков
         formService.loadSupplierListForm();
+    }
+
+    private void showAccessDeniedAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Ошибка прав доступа");
+        alert.setHeaderText("Доступ запрещён");
+        alert.setContentText(message);
+        alert.showAndWait();
     }
 
     @FXML

@@ -2,6 +2,7 @@ package org.example.kolesnikovsport_shop.model.entity;
 
 import jakarta.persistence.*;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -31,6 +32,10 @@ public class Equipment {
 
     // Количество в наличии (stock)
     private int stock;
+
+    // Связанные покупки - при удалении оборудования удаляются и связанные покупки
+    @OneToMany(mappedBy = "equipment", cascade = CascadeType.REMOVE)
+    private List<Purchase> purchases;
 
     public Equipment() {}
 
@@ -80,6 +85,14 @@ public class Equipment {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+    public List<Purchase> getPurchases() {
+        return purchases;
+    }
+
+    public void setPurchases(List<Purchase> purchases) {
+        this.purchases = purchases;
     }
 
     @Override

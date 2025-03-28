@@ -95,7 +95,7 @@ public class MenuFormController implements Initializable {
 
     @FXML
     private void someAdminFunction() {
-        System.out.println("Админская функция!");
+        System.out.println("Вы зашли в аккаунт как Администратор! Кнопки Administrator нету у обычного пользователя.");
     }
 
     @FXML

@@ -28,4 +28,8 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
             "group by p.equipment " +
             "order by totalSold desc")
     List<Object[]> getTopEquipmentAllTime();
+
+
+
+
 }

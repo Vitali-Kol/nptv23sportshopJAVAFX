@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import org.example.kolesnikovsport_shop.model.entity.Customer;
 import org.example.kolesnikovsport_shop.model.entity.Equipment;
@@ -51,6 +52,37 @@ public class PurchaseFormController implements Initializable {
         cbCustomer.setItems(FXCollections.observableArrayList(customerService.getAllCustomers()));
         cbEquipment.setItems(FXCollections.observableArrayList(equipmentService.getAllEquipment()));
 
+        // Настраиваем отображение покупателей в ComboBox
+        cbCustomer.setCellFactory(listView -> new ListCell<Customer>() {
+            @Override
+            protected void updateItem(Customer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText("ID: " + item.getId()
+                            + ", Логин: " + item.getUsername()
+                            + ", Имя: " + item.getFirstname()
+                            + ", Фамилия: " + item.getLastname()
+                            + ", Баланс: " + item.getBalance());
+                }
+            }
+        });
+        cbCustomer.setButtonCell(new ListCell<Customer>() {
+            @Override
+            protected void updateItem(Customer item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText("ID: " + item.getId()
+                            + ", Логин: " + item.getUsername()
+                            + ", Имя: " + item.getFirstname()
+                            + ", Фамилия: " + item.getLastname()
+                            + ", Баланс: " + item.getBalance());
+                }
+            }
+        });
     }
 
     @FXML
@@ -62,6 +94,12 @@ public class PurchaseFormController implements Initializable {
 
             if (customer == null || equipment == null) {
                 lblPurchaseResult.setText("Выберите покупателя и товар!");
+                return;
+            }
+
+            // Проверяем, достаточно ли товара в наличии
+            if (equipment.getStock() < quantity) {
+                lblPurchaseResult.setText("Недостаточно товара в наличии!");
                 return;
             }
 

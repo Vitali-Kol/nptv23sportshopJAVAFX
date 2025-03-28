@@ -22,7 +22,7 @@
                 <Label text="Товар:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
                 <ComboBox fx:id="cbEquipment" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
 
-                <Label text="Количество:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <Label text="Наличие товара (шт.):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
                 <TextField fx:id="tfQuantity" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
             </children>
         </GridPane>

@@ -53,7 +53,7 @@ public class PurchaseService {
         }
         // Уменьшаем баланс покупателя и количество товара
         customer.setBalance(customer.getBalance() - totalPrice);
-        equipment.setQuantity(equipment.getQuantity() - quantity);
+        equipment.setStock(equipment.getStock() - quantity);
         customerService.update(customer);
         equipmentService.update(equipment);
         // Создаем и сохраняем запись о покупке
