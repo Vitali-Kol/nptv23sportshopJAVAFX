@@ -17,9 +17,9 @@ public class IncomeFormController {
     private final FormService formService;
 
     @FXML
-    private TextField tfStartDate; // Формат: yyyy-MM-dd
+    private TextField tfStartDate;
     @FXML
-    private TextField tfEndDate;   // Формат: yyyy-MM-dd
+    private TextField tfEndDate;
     @FXML
     private Label lblIncomeResult;
 

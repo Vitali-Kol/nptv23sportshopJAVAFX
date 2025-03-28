@@ -60,9 +60,9 @@ public class MainFormController implements Initializable {
 
     @FXML
     private void showEditEquipmentForm() {
-        // Проверяем, имеет ли текущий пользователь роль администратора
+
         if (!CustomerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
-            // Если нет – выводим окно с сообщением об ошибке
+
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ошибка доступа");
             alert.setHeaderText("Редактирование запрещено");
@@ -79,7 +79,7 @@ public class MainFormController implements Initializable {
         }
     }
 
-    // Открытие окна с подробной информацией о выбранном оборудовании
+
     @FXML
     private void showSelectedEquipmentForm() {
         Equipment selectedEquipment = tvEquipmentList.getSelectionModel().getSelectedItem();
@@ -90,10 +90,10 @@ public class MainFormController implements Initializable {
         }
     }
 
-    // Новый метод для удаления выбранного оборудования
+
     @FXML
     private void deleteSelectedEquipment() {
-        // Если текущий пользователь не администратор – выводим сообщение об ошибке
+
         if (!CustomerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ошибка доступа");
@@ -106,7 +106,6 @@ public class MainFormController implements Initializable {
         Equipment selectedEquipment = tvEquipmentList.getSelectionModel().getSelectedItem();
         if (selectedEquipment != null) {
             equipmentService.delete(selectedEquipment.getId());
-            // Обновляем список оборудования после удаления
             tvEquipmentList.setItems(equipmentService.getAllEquipment());
         }
     }

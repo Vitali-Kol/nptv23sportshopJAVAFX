@@ -25,7 +25,7 @@ public class SupplierFormController implements Initializable {
     private TextField tfName;
 
     @FXML
-    private TextField tfContact; // например, телефон или email
+    private TextField tfContact;
 
     public SupplierFormController(FormService formService, SupplierService supplierService, CustomerService customerService) {
         this.formService = formService;
@@ -35,7 +35,7 @@ public class SupplierFormController implements Initializable {
 
     @FXML
     private void create() throws IOException {
-        // Простая проверка заполненности поля имени
+
         if (tfName.getText() == null || tfName.getText().trim().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ошибка");
@@ -50,7 +50,7 @@ public class SupplierFormController implements Initializable {
         supplier.setContact(tfContact.getText());
         supplierService.add(supplier);
 
-        // Очистка полей после успешного добавления
+
         tfName.clear();
         tfContact.clear();
 
@@ -64,8 +64,7 @@ public class SupplierFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Если текущий пользователь не менеджер и не админ,
-        // запрещаем добавлять поставщиков
+
         if (!CustomerService.currentUserHasAnyRole(
                 CustomerService.ROLES.MANAGER,
                 CustomerService.ROLES.ADMINISTRATOR)) {
@@ -75,7 +74,7 @@ public class SupplierFormController implements Initializable {
             alert.setContentText("У вас нет прав на добавление поставщиков!");
             alert.showAndWait();
 
-            // Возвращаемся в главное меню
+
             formService.loadMainForm();
         }
     }

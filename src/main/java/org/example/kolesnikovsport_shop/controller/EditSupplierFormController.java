@@ -48,7 +48,7 @@ public class EditSupplierFormController {
 
     @FXML
     private void saveSupplier() throws IOException {
-        // Проверяем роль
+
         if (!CustomerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR) &&
                 !CustomerService.currentUserHasRole(CustomerService.ROLES.MANAGER)) {
             showAccessDeniedAlert("У вас нет прав на редактирование поставщика.");
@@ -72,7 +72,6 @@ public class EditSupplierFormController {
 
     @FXML
     private void cancelEdit() throws IOException {
-        // Отмена – просто возвращаемся к списку
         formService.loadSupplierListForm();
     }
 }

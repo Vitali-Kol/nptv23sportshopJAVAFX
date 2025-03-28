@@ -23,7 +23,7 @@ public class EditCustomerFormController {
     private TextField balanceField;
 
     private final CustomerService customerService;
-    private final FormService formService; // добавляем зависимость на FormService
+    private final FormService formService;
     private Customer customer;
 
     @Autowired
@@ -34,7 +34,7 @@ public class EditCustomerFormController {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
-        // Если текущий пользователь не администратор, выбросим ошибку или сразу вернёмся к списку
+
         if (!CustomerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
             showError("У вас нет прав на редактирование покупателя!");
             formService.loadCustomerListForm();
@@ -60,9 +60,9 @@ public class EditCustomerFormController {
             try {
                 customerService.update(customer);
                 showSuccess("Покупатель успешно обновлен!");
-                formService.loadCustomerListForm(); // возвращаемся к списку покупателей
+                formService.loadCustomerListForm();
             } catch (Exception e) {
-                // Можно дополнительно обработать DataIntegrityViolationException и вывести понятное сообщение
+
                 showError("Ошибка обновления: " + e.getMessage());
             }
         }
@@ -70,11 +70,9 @@ public class EditCustomerFormController {
 
     @FXML
     private void cancelEdit() {
-        // Если нужно вернуться к списку покупателей:
+
         formService.loadCustomerListForm();
-        // Если же нужно просто закрыть текущее окно, можно использовать:
-        // Stage currentStage = (Stage) firstnameField.getScene().getWindow();
-        // currentStage.close();
+
     }
 
     private void showError(String message) {

@@ -67,7 +67,6 @@ public class CustomerService {
         return true;
     }
 
-    // --- ВАЖНО: статические методы для проверки ролей ---
     public static boolean currentUserHasRole(ROLES role) {
         if (currentCustomer == null) {
             return false;
@@ -86,6 +85,9 @@ public class CustomerService {
         }
         return false;
     }
+
+    // Метод удаления покупателя по id
+    public void deleteCustomer(Long customerId) {
+        repository.deleteById(customerId);
+    }
 }
-
-

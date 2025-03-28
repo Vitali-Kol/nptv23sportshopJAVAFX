@@ -50,17 +50,16 @@ public class EditEquipmentFormController implements Initializable {
 
     @FXML
     private void goEdit() throws IOException {
-        // Проверяем роль
+
         if (!CustomerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR) &&
                 !CustomerService.currentUserHasRole(CustomerService.ROLES.MANAGER)) {
-            // Например, разрешаем редактировать только админам и менеджерам
+
             showAccessDeniedAlert("У вас нет прав на редактирование оборудования.");
             return;
         }
 
-        // Если роль подходит, продолжаем
+
         editEquipment.setName(tfName.getText());
-        // ...
         equipmentService.update(editEquipment);
         formService.loadMainForm();
     }

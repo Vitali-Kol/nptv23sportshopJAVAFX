@@ -25,16 +25,7 @@ public class PurchaseService {
         this.customerService = customerService;
     }
 
-    /**
-     * Покупка товара.
-     * Уменьшается баланс покупателя на цену товара * количество, а также количество товара на складе.
-     * Если средств недостаточно или товара меньше требуемого количества, возвращается сообщение об ошибке.
-     *
-     * @param customerId ID покупателя.
-     * @param equipmentId ID товара.
-     * @param quantity количество товара для покупки.
-     * @return Результат операции.
-     */
+
     public String buyEquipment(Long customerId, Long equipmentId, int quantity) {
         Customer customer = customerService.findById(customerId).orElse(null);
         Equipment equipment = equipmentService.findById(equipmentId);
@@ -51,20 +42,18 @@ public class PurchaseService {
         if (customer.getBalance() < totalPrice) {
             return "Недостаточно средств у покупателя!";
         }
-        // Уменьшаем баланс покупателя и количество товара
+
         customer.setBalance(customer.getBalance() - totalPrice);
         equipment.setStock(equipment.getStock() - quantity);
         customerService.update(customer);
         equipmentService.update(equipment);
-        // Создаем и сохраняем запись о покупке
+
         Purchase purchase = new Purchase(equipment, customer, quantity, totalPrice, LocalDateTime.now());
         purchaseRepository.save(purchase);
         return "Покупка успешно выполнена!";
     }
 
-    /**
-     * Возвращает доход магазина за период.
-     */
+
     public double getIncome(LocalDateTime start, LocalDateTime end) {
         Double sum = purchaseRepository.getIncomeBetween(start, end);
         return (sum == null ? 0.0 : sum);
@@ -88,12 +77,12 @@ public class PurchaseService {
         return getIncome(start, end);
     }
 
-    // Рейтинг продаваемости товаров за указанный период
+
     public List<Object[]> getTopEquipment(LocalDateTime start, LocalDateTime end) {
         return purchaseRepository.getTopEquipmentBetween(start, end);
     }
 
-    // Рейтинг товаров за всё время
+
     public List<Object[]> getTopEquipmentAllTime() {
         return purchaseRepository.getTopEquipmentAllTime();
     }
@@ -116,7 +105,7 @@ public class PurchaseService {
         return purchaseRepository.getTopEquipmentBetween(start, end);
     }
 
-    // Для указанной недели (начало недели передается как LocalDate)
+
     public List<Object[]> getTopEquipmentByWeek(LocalDate weekStart) {
         LocalDateTime start = weekStart.atStartOfDay();
         LocalDateTime end = weekStart.plusDays(7).atStartOfDay().minusNanos(1);

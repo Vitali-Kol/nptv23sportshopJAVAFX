@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.example.kolesnikovsport_shop.model.entity.Equipment;
@@ -40,6 +41,9 @@ public class EquipmentListController implements Initializable {
     @FXML
     private TableColumn<Equipment, String> tcStock;
 
+    @FXML
+    private Button deleteEquipmentButton;
+
     public EquipmentListController(EquipmentService equipmentService, FormService formService) {
         this.equipmentService = equipmentService;
         this.formService = formService;
@@ -47,7 +51,7 @@ public class EquipmentListController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Настраиваем колонки таблицы
+
         tcId.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getId().toString()));
         tcName.setCellValueFactory(cellData ->
@@ -59,7 +63,7 @@ public class EquipmentListController implements Initializable {
         tcStock.setCellValueFactory(cellData ->
                 new SimpleStringProperty(String.valueOf(cellData.getValue().getStock())));
 
-        // Загружаем список оборудования из EquipmentService
+
         List<Equipment> equipmentList = equipmentService.getAllEquipment();
         tvEquipment.setItems(FXCollections.observableArrayList(equipmentList));
     }
@@ -89,6 +93,21 @@ public class EquipmentListController implements Initializable {
         alert.setHeaderText("Редактирование запрещено");
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void deleteSelectedEquipment() {
+        if (!CustomerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
+            showAccessDeniedAlert("Нельзя вам это делать!");
+            return;
+        }
+        Equipment selected = tvEquipment.getSelectionModel().getSelectedItem();
+        if (selected != null) {
+            equipmentService.delete(selected.getId());
+            tvEquipment.setItems(FXCollections.observableArrayList(equipmentService.getAllEquipment()));
+        } else {
+            showAccessDeniedAlert("Оборудование не выбрано!");
+        }
     }
 
 }

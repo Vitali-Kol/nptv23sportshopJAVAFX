@@ -49,26 +49,23 @@ public class SelectedEquipmentFormController {
     public void setEquipment(Equipment equipment) {
         this.selectedEquipment = equipment;
         if (equipment != null) {
-            // Название
+
             nameLabel.setText(equipment.getName());
-            // Поставщики
+
             String suppliersStr = equipment.getSuppliers().stream()
                     .map(supplier -> supplier.getName())
                     .collect(Collectors.joining(", "));
             suppliersLabel.setText(suppliersStr);
-            // Цена, количество, в наличии
+
             priceLabel.setText(String.valueOf(equipment.getPrice()));
             quantityLabel.setText(String.valueOf(equipment.getQuantity()));
             stockLabel.setText(String.valueOf(equipment.getStock()));
         }
 
-        // Если пользователь не администратор или менеджер, скрываем кнопки редактирования и удаления
-        // Эти кнопки удалены, поэтому этот код больше не нужен
+
     }
 
-    /**
-     * Метод для отображения предупреждения о недостаточности прав.
-     */
+
     private void showAccessDeniedAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Доступ запрещён");

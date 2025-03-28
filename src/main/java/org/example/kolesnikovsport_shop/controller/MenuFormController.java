@@ -18,7 +18,7 @@ public class MenuFormController implements Initializable {
     private final CustomerService customerService;
 
     @FXML
-    private Menu menuAdministrator; // привязка к fx:id="menuAdministrator"
+    private Menu menuAdministrator;
 
     public MenuFormController(FormService formService, CustomerService customerService) {
         this.formService = formService;
@@ -27,7 +27,7 @@ public class MenuFormController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Если текущий пользователь не администратор, скрываем админское меню
+
         if (!customerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
             menuAdministrator.setVisible(false);
         }
@@ -109,11 +109,11 @@ public class MenuFormController implements Initializable {
         formService.loadLoginForm();
     }
 
-    // Ограничиваем доступ к форме покупки, дохода и рейтинга товаров
+
 
     @FXML
     private void showPurchaseForm() {
-        // Функция покупки доступна всем, поэтому проверка не нужна
+
         formService.loadPurchaseForm();
     }
 

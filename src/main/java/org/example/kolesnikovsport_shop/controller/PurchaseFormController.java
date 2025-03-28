@@ -35,7 +35,7 @@ public class PurchaseFormController implements Initializable {
     @FXML
     private Label lblPurchaseResult;
 
-    // Конструктор с внедрением зависимостей через Spring
+
     public PurchaseFormController(PurchaseService purchaseService,
                                   FormService formService,
                                   CustomerService customerService,
@@ -48,11 +48,11 @@ public class PurchaseFormController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Заполняем ComboBox списком покупателей и товаров
+
         cbCustomer.setItems(FXCollections.observableArrayList(customerService.getAllCustomers()));
         cbEquipment.setItems(FXCollections.observableArrayList(equipmentService.getAllEquipment()));
 
-        // Настраиваем отображение покупателей в ComboBox
+
         cbCustomer.setCellFactory(listView -> new ListCell<Customer>() {
             @Override
             protected void updateItem(Customer item, boolean empty) {
@@ -97,13 +97,11 @@ public class PurchaseFormController implements Initializable {
                 return;
             }
 
-            // Проверяем, достаточно ли товара в наличии
             if (equipment.getStock() < quantity) {
                 lblPurchaseResult.setText("Недостаточно товара в наличии!");
                 return;
             }
 
-            // Вызываем метод покупки, который должен обновить баланс покупателя и количество товара
             String result = purchaseService.buyEquipment(customer.getId(), equipment.getId(), quantity);
             lblPurchaseResult.setText(result);
         } catch (NumberFormatException e) {

@@ -21,5 +21,7 @@
         </TableView>
         <Button text="Главная" onAction="#goToMainForm"/>
         <Button fx:id="editCustomerButton" text="Редактировать" onAction="#editCustomer" />
+        <Button fx:id="deleteCustomerButton" text="Удалить" onAction="#deleteCustomer"/>
+
     </children>
 </VBox>

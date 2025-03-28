@@ -35,7 +35,7 @@ public class RegistrationFormController {
     @FXML
     private void registration() {
         try {
-            // Простая валидация: проверяем, что все поля заполнены
+
             if (tfUsername.getText().trim().isEmpty() ||
                     pfPassword.getText().trim().isEmpty() ||
                     tfFirstname.getText().trim().isEmpty() ||
@@ -53,9 +53,9 @@ public class RegistrationFormController {
             newCustomer.setLastname(tfLastname.getText().trim());
             newCustomer.setUsername(tfUsername.getText().trim());
             newCustomer.setPassword(pfPassword.getText().trim());
-            // Устанавливаем баланс по умолчанию
+
             newCustomer.setBalance(0.0);
-            // Новые пользователи получают только роль CUSTOMER
+
             newCustomer.getRoles().add(CustomerService.ROLES.CUSTOMER.toString());
 
             customerService.add(newCustomer);

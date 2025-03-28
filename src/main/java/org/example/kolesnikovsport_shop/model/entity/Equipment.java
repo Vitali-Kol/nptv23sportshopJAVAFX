@@ -13,7 +13,7 @@ public class Equipment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Название оборудования
+
     private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -24,16 +24,16 @@ public class Equipment {
     )
     private Set<Supplier> suppliers = new HashSet<>();
 
-    // Цена оборудования
+
     private double price;
 
-    // Общее количество
+
     private int quantity;
 
-    // Количество в наличии (stock)
+
     private int stock;
 
-    // Связанные покупки - при удалении оборудования удаляются и связанные покупки
+
     @OneToMany(mappedBy = "equipment", cascade = CascadeType.REMOVE)
     private List<Purchase> purchases;
 

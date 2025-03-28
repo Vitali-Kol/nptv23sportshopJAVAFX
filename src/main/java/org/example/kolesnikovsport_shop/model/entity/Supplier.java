@@ -12,10 +12,10 @@ public class Supplier implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Вместо разделения на firstname и lastname, используем единое поле name
+
     private String name;
 
-    // Если потребуется, можно добавить поле для контактов (телефон, email и т.д.)
+
     private String contact;
 
     @ManyToMany(mappedBy = "suppliers",

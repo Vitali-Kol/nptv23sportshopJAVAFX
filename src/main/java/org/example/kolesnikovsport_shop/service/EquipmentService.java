@@ -25,7 +25,7 @@ public class EquipmentService {
         equipmentRepository.save(equipment);
     }
 
-    // Добавьте этот метод
+
     public Equipment findById(Long id) {
         Optional<Equipment> optional = equipmentRepository.findById(id);
         return optional.orElse(null);

@@ -23,11 +23,12 @@ public class SupplierService {
         return supplierRepository.save(supplier);
     }
 
-    // Новый метод для обновления
     public Supplier updateSupplier(Supplier supplier) {
-        // Можно сделать дополнительную валидацию, если нужно
         return supplierRepository.save(supplier);
     }
 
-    // Другие методы...
+    public void deleteSupplier(Long supplierId) {
+        supplierRepository.deleteEquipmentSupplierLinks(supplierId);
+        supplierRepository.deleteById(supplierId);
+    }
 }

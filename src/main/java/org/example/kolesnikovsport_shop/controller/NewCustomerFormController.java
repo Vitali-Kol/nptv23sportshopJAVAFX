@@ -24,7 +24,7 @@ public class NewCustomerFormController {
     @FXML
     private PasswordField pfPassword;
     @FXML
-    private TextField tfBalance; // Поле для баланса
+    private TextField tfBalance;
 
     public NewCustomerFormController(CustomerService customerService, FormService formService) {
         this.customerService = customerService;
@@ -52,7 +52,7 @@ public class NewCustomerFormController {
             customer.setLastname(tfLastname.getText().trim());
             customer.setUsername(tfUsername.getText().trim());
             customer.setPassword(pfPassword.getText().trim());
-            // Преобразование баланса
+
             double balance = Double.parseDouble(tfBalance.getText().trim());
             customer.setBalance(balance);
             customer.getRoles().add(CustomerService.ROLES.CUSTOMER.toString());

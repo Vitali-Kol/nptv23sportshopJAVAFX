@@ -7,9 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="vbSupplierListRoot" prefHeight="400.0" prefWidth="600.0"
-      xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="org.example.kolesnikovsport_shop.controller.SupplierListController">
+<VBox fx:id="vbSupplierListRoot" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.kolesnikovsport_shop.controller.SupplierListController">
     <children>
         <TableView fx:id="tvSupplierList" prefHeight="300.0" prefWidth="600.0">
             <columns>
@@ -18,18 +16,19 @@
                 <TableColumn fx:id="tcContact" prefWidth="200.0" text="Контакт" />
             </columns>
         </TableView>
-        <HBox spacing="10">
+        <HBox alignment="CENTER_LEFT" prefHeight="45.0" prefWidth="568.0" spacing="10">
             <children>
-                <Button text="Редактировать поставщика" onAction="#editSelectedSupplier">
+                <Button onAction="#editSelectedSupplier" text="Редактировать поставщика">
                     <HBox.margin>
-                        <Insets top="10" right="10" bottom="10" left="10"/>
+                        <Insets bottom="10" left="10" right="10" top="10" />
                     </HBox.margin>
                 </Button>
-                <Button text="Главное меню" onAction="#goToMainForm">
+                <Button onAction="#goToMainForm" text="Главное меню">
                     <HBox.margin>
-                        <Insets top="10" right="10" bottom="10" left="10"/>
+                        <Insets bottom="10" left="10" right="10" top="10" />
                     </HBox.margin>
                 </Button>
+                <Button fx:id="deleteSupplierButton" contentDisplay="CENTER" onAction="#deleteSelectedSupplier" prefHeight="30.0" prefWidth="135.0" text="Удалить поставщика" />
             </children>
         </HBox>
     </children>

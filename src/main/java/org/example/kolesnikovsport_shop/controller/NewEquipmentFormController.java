@@ -50,7 +50,7 @@ public class NewEquipmentFormController implements Initializable {
         equipment.getSuppliers().addAll(lvSuppliers.getSelectionModel().getSelectedItems());
         equipment.setPrice(Double.parseDouble(tfPrice.getText()));
         equipment.setQuantity(Integer.parseInt(tfQuantity.getText()));
-        // Устанавливаем stock равным количеству при создании
+
         equipment.setStock(equipment.getQuantity());
         equipmentService.create(equipment);
         formService.loadMainForm();

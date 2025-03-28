@@ -30,7 +30,7 @@ public class Purchase {
         this.purchaseDate = purchaseDate;
     }
 
-    // Геттеры и сеттеры
+
 
     public Long getId() {
         return id;

@@ -177,9 +177,7 @@ public class FormService {
         }
     }
 
-    // ========================
-    // Методы для работы с покупателями
-    // ========================
+
 
     public void loadNewCustomerForm() {
         FXMLLoader fxmlLoader = springFXMLLoader.load("/customer/newCustomerForm.fxml");
@@ -226,11 +224,7 @@ public class FormService {
         getPrimaryStage().show();
     }
 
-    // ========================
-    // Новые методы для реализации функций 7-9
-    // ========================
 
-    // Форма покупки товара
     public void loadPurchaseForm() {
         FXMLLoader fxmlLoader = springFXMLLoader.load("/purchase/purchaseForm.fxml");
         Parent root;
@@ -246,7 +240,6 @@ public class FormService {
         getPrimaryStage().show();
     }
 
-    // Форма дохода магазина
     public void loadIncomeForm() {
         FXMLLoader fxmlLoader = springFXMLLoader.load("/purchase/incomeForm.fxml");
         Parent root;
@@ -262,7 +255,7 @@ public class FormService {
         getPrimaryStage().show();
     }
 
-    // Форма рейтинга продаваемости товаров
+
     public void loadRatingForm() {
         FXMLLoader fxmlLoader = springFXMLLoader.load("/purchase/ratingForm.fxml");
         Parent root;

@@ -18,7 +18,7 @@ public class Customer {
     private String firstname;
     private String lastname;
 
-    // Новое поле для хранения баланса покупателя
+
     private double balance;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -34,7 +34,7 @@ public class Customer {
         this.balance = balance;
     }
 
-    // Геттеры и сеттеры
+
     public Long getId() {
         return id;
     }

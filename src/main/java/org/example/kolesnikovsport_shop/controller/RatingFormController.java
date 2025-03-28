@@ -39,11 +39,11 @@ public class RatingFormController {
 
     @FXML
     public void initialize() {
-        // Заполняем ComboBox вариантами
+
         cbPeriodType.setItems(FXCollections.observableArrayList("Все время", "Год", "Месяц", "Неделя"));
         tfPeriodValue.setPromptText("Введите значение (например, 2025 или 3)");
 
-        // Настраиваем колонки таблицы для отображения рейтинга
+
         tcEquipment.setCellValueFactory(cellData -> cellData.getValue().equipmentProperty());
         tcTotalSold.setCellValueFactory(cellData -> cellData.getValue().totalSoldProperty());
     }
@@ -57,7 +57,7 @@ public class RatingFormController {
         LocalDateTime end = null;
 
         if ("Все время".equals(periodType)) {
-            // Задаём диапазон, охватывающий все время, либо оставляем null
+
         } else if ("Год".equals(periodType)) {
             try {
                 int year = Integer.parseInt(periodValue);
@@ -81,7 +81,7 @@ public class RatingFormController {
         } else if ("Неделя".equals(periodType)) {
             try {
                 int weekNumber = Integer.parseInt(periodValue);
-                // Например, предположим, что неделя начинается с понедельника текущей недели
+
                 LocalDate weekStart = LocalDate.now().with(java.time.temporal.IsoFields.WEEK_OF_WEEK_BASED_YEAR, weekNumber)
                         .with(java.time.DayOfWeek.MONDAY);
                 start = weekStart.atStartOfDay();
@@ -101,7 +101,7 @@ public class RatingFormController {
         }
 
         for (Object[] row : results) {
-            // row[0] теперь приводим к Equipment, а затем получаем название
+
             String equipmentName = ((Equipment) row[0]).getName();
             int totalSold = ((Number) row[1]).intValue();
             ratings.add(new EquipmentRating(equipmentName, totalSold));
@@ -123,7 +123,7 @@ public class RatingFormController {
         alert.showAndWait();
     }
 
-    // Внутренний класс для представления данных рейтинга
+
     public static class EquipmentRating {
         private final SimpleStringProperty equipment;
         private final SimpleStringProperty totalSold;

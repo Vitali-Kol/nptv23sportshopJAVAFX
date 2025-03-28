@@ -4,6 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.example.kolesnikovsport_shop.model.entity.Supplier;
@@ -32,6 +33,9 @@ public class SupplierListController implements Initializable {
 
     @FXML
     private TableColumn<Supplier, String> tcContact;
+
+    @FXML
+    private Button deleteSupplierButton;
 
     public SupplierListController(SupplierService supplierService, FormService formService) {
         this.supplierService = supplierService;
@@ -71,6 +75,21 @@ public class SupplierListController implements Initializable {
         alert.setHeaderText("Редактирование запрещено");
         alert.setContentText(message);
         alert.showAndWait();
+    }
+
+    @FXML
+    private void deleteSelectedSupplier() {
+        if (!CustomerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
+            showAccessDeniedAlert("Нельзя вам это делать!");
+            return;
+        }
+        Supplier selectedSupplier = tvSupplierList.getSelectionModel().getSelectedItem();
+        if (selectedSupplier != null) {
+            supplierService.deleteSupplier(selectedSupplier.getId());
+            tvSupplierList.setItems(FXCollections.observableArrayList(supplierService.getAllSuppliers()));
+        } else {
+            showAccessDeniedAlert("Поставщик не выбран!");
+        }
     }
 
 }

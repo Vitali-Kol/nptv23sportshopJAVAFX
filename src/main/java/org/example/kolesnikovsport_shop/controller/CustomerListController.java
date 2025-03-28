@@ -37,7 +37,9 @@ public class CustomerListController implements Initializable {
     private TableColumn<Customer, String> tcBalance;
 
     @FXML
-    private Button editCustomerButton;  // Кнопка редактирования покупателя
+    private Button editCustomerButton;
+    @FXML
+    private Button deleteCustomerButton;
 
     public CustomerListController(CustomerService customerService, FormService formService) {
         this.customerService = customerService;
@@ -46,11 +48,11 @@ public class CustomerListController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        // Загружаем всех покупателей
+
         List<Customer> customers = customerService.getAllCustomers();
         tvCustomerList.setItems(FXCollections.observableArrayList(customers));
 
-        // Устанавливаем значения для каждой колонки
+
         tcId.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getId().toString()));
         tcUsername.setCellValueFactory(cellData ->
@@ -65,10 +67,10 @@ public class CustomerListController implements Initializable {
 
     }
 
-    // Метод для редактирования покупателя
+
     @FXML
     private void editCustomer() {
-        // Если текущий пользователь не администратор, показываем сообщение об ошибке
+
         if (!customerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
             showAccessDeniedAlert("У вас нет доступа к редактированию покупателей.");
             return;
@@ -82,7 +84,7 @@ public class CustomerListController implements Initializable {
         }
     }
 
-    // Метод для отображения ошибки, если покупатель не выбран
+
     private void showAccessDeniedAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Ошибка");
@@ -91,7 +93,22 @@ public class CustomerListController implements Initializable {
         alert.showAndWait();
     }
 
-    // Переход на главную форму
+    @FXML
+    private void deleteCustomer() {
+        if (!customerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
+            showAccessDeniedAlert("Нельзя вам это делать!");
+            return;
+        }
+        Customer selectedCustomer = tvCustomerList.getSelectionModel().getSelectedItem();
+        if (selectedCustomer != null) {
+            customerService.deleteCustomer(selectedCustomer.getId());
+            tvCustomerList.setItems(FXCollections.observableArrayList(customerService.getAllCustomers()));
+        } else {
+            showAccessDeniedAlert("Пожалуйста, выберите покупателя для удаления.");
+        }
+    }
+
+
     @FXML
     private void goToMainForm() {
         formService.loadMainForm();
