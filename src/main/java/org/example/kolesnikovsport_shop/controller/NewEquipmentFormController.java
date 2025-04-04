@@ -8,6 +8,7 @@ import org.example.kolesnikovsport_shop.service.SupplierService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
@@ -48,10 +49,36 @@ public class NewEquipmentFormController implements Initializable {
         Equipment equipment = new Equipment();
         equipment.setName(tfName.getText());
         equipment.getSuppliers().addAll(lvSuppliers.getSelectionModel().getSelectedItems());
-        equipment.setPrice(Double.parseDouble(tfPrice.getText()));
-        equipment.setQuantity(Integer.parseInt(tfQuantity.getText()));
 
-        equipment.setStock(equipment.getQuantity());
+        // Обработка поля "Цена"
+        double price;
+        try {
+            price = Double.parseDouble(tfPrice.getText().trim());
+        } catch (NumberFormatException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка ввода");
+            alert.setHeaderText("Неверный формат цены");
+            alert.setContentText("Пожалуйста, введите число для цены. Буквы не допускаются!");
+            alert.showAndWait();
+            return;
+        }
+        equipment.setPrice(price);
+
+        // Обработка поля "Количество"
+        int quantity;
+        try {
+            quantity = Integer.parseInt(tfQuantity.getText().trim());
+        } catch (NumberFormatException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка ввода");
+            alert.setHeaderText("Неверный формат количества");
+            alert.setContentText("Пожалуйста, введите число для количества. Буквы не допускаются!");
+            alert.showAndWait();
+            return;
+        }
+        equipment.setQuantity(quantity);
+        equipment.setStock(quantity);
+
         equipmentService.create(equipment);
         formService.loadMainForm();
     }
@@ -65,7 +92,7 @@ public class NewEquipmentFormController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         lvSuppliers.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         List<Supplier> suppliers = supplierService.getAllSuppliers();
-        lvSuppliers.getItems().setAll(FXCollections.observableArrayList(suppliers));
+        lvSuppliers.setItems(FXCollections.observableArrayList(suppliers));
         lvSuppliers.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(Supplier supplier, boolean empty) {

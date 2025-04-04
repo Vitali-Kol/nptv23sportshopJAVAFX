@@ -133,6 +133,11 @@ public class MenuFormController implements Initializable {
     }
 
     @FXML
+    private void showChangePasswordForm() {
+        formService.loadChangePasswordForm();
+    }
+
+    @FXML
     private void showRatingForm() {
         if (!CustomerService.currentUserHasAnyRole(
                 CustomerService.ROLES.MANAGER,

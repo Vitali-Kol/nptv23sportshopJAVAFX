@@ -255,6 +255,22 @@ public class FormService {
         getPrimaryStage().show();
     }
 
+    public void loadChangePasswordForm() {
+        FXMLLoader fxmlLoader = springFXMLLoader.load("/user/ChangePasswordForm.fxml");
+        Parent root;
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        Scene scene = new Scene(root);
+        getPrimaryStage().setScene(scene);
+        getPrimaryStage().setTitle("Смена пароля");
+        getPrimaryStage().centerOnScreen();
+        getPrimaryStage().show();
+    }
+
+
 
     public void loadRatingForm() {
         FXMLLoader fxmlLoader = springFXMLLoader.load("/purchase/ratingForm.fxml");

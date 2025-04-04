@@ -86,8 +86,28 @@ public class CustomerService {
         return false;
     }
 
+    public boolean isUsernameTaken(String username) {
+        return repository.findByUsername(username).isPresent();
+    }
+
+
     // Метод удаления покупателя по id
     public void deleteCustomer(Long customerId) {
         repository.deleteById(customerId);
+    }
+
+    public Customer changePassword(Long userId, String newPassword) {
+        // Если текущий пользователь не администратор, то он может менять пароль только для своего аккаунта
+        if (!currentUserHasRole(ROLES.ADMINISTRATOR)) {
+            if (currentCustomer == null || !currentCustomer.getId().equals(userId)) {
+                throw new SecurityException("У вас нет прав для изменения пароля другого пользователя.");
+            }
+        }
+        // Находим пользователя по ID
+        Customer user = repository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+        // Здесь можно добавить дополнительную валидацию нового пароля (например, длину и сложность)
+        user.setPassword(newPassword);
+        return repository.save(user);
     }
 }

@@ -1,19 +1,20 @@
 package org.example.kolesnikovsport_shop.controller;
 
-import javafx.scene.control.Alert;
-import org.example.kolesnikovsport_shop.model.entity.Equipment;
-import org.example.kolesnikovsport_shop.service.CustomerService;
-import org.example.kolesnikovsport_shop.service.EquipmentService;
-import org.example.kolesnikovsport_shop.service.FormService;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import org.example.kolesnikovsport_shop.model.entity.Equipment;
+import org.example.kolesnikovsport_shop.service.CustomerService;
+import org.example.kolesnikovsport_shop.service.EquipmentService;
+import org.example.kolesnikovsport_shop.service.FormService;
 import org.springframework.stereotype.Component;
 
 import java.net.URL;
@@ -60,9 +61,7 @@ public class MainFormController implements Initializable {
 
     @FXML
     private void showEditEquipmentForm() {
-
         if (!CustomerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
-
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ошибка доступа");
             alert.setHeaderText("Редактирование запрещено");
@@ -70,7 +69,6 @@ public class MainFormController implements Initializable {
             alert.showAndWait();
             return;
         }
-
         Equipment selectedEquipment = tvEquipmentList.getSelectionModel().getSelectedItem();
         if (selectedEquipment != null) {
             formService.loadEditEquipmentForm(selectedEquipment);
@@ -78,7 +76,6 @@ public class MainFormController implements Initializable {
             System.out.println("Оборудование не выбрано!");
         }
     }
-
 
     @FXML
     private void showSelectedEquipmentForm() {
@@ -90,10 +87,8 @@ public class MainFormController implements Initializable {
         }
     }
 
-
     @FXML
     private void deleteSelectedEquipment() {
-
         if (!CustomerService.currentUserHasRole(CustomerService.ROLES.ADMINISTRATOR)) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Ошибка доступа");
@@ -102,7 +97,6 @@ public class MainFormController implements Initializable {
             alert.showAndWait();
             return;
         }
-
         Equipment selectedEquipment = tvEquipmentList.getSelectionModel().getSelectedItem();
         if (selectedEquipment != null) {
             equipmentService.delete(selectedEquipment.getId());
@@ -112,10 +106,17 @@ public class MainFormController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // Добавляем меню в начало главного окна
         vbMainFormRoot.getChildren().addFirst(formService.loadMenuForm());
+
+        // Заполняем таблицу оборудованием
         tvEquipmentList.setItems(equipmentService.getAllEquipment());
-        tcId.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId().toString()));
-        tcName.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+
+        // Настраиваем колонки таблицы
+        tcId.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getId().toString()));
+        tcName.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getName()));
         tcSuppliers.setCellValueFactory(cellData -> {
             Equipment equipment = cellData.getValue();
             if (equipment.getSuppliers() == null || equipment.getSuppliers().isEmpty()) {
@@ -126,13 +127,28 @@ public class MainFormController implements Initializable {
                     .collect(Collectors.joining(", "));
             return new SimpleStringProperty(suppliers);
         });
-        tcPrice.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getPrice())));
-        tcQuantity.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getQuantity())));
-        tcStock.setCellValueFactory(cellData -> new SimpleStringProperty(String.valueOf(cellData.getValue().getStock())));
+        tcPrice.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getPrice())));
+        tcQuantity.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getQuantity())));
+        tcStock.setCellValueFactory(cellData ->
+                new SimpleStringProperty(String.valueOf(cellData.getValue().getStock())));
+
+        // При выборе строки отображаем панель редактирования
         tvEquipmentList.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Equipment>() {
             @Override
             public void changed(ObservableValue<? extends Equipment> observable, Equipment oldValue, Equipment newValue) {
                 hbEditEquipment.setVisible(newValue != null);
+            }
+        });
+
+        // Обработчик двойного клика: при двойном клике по строке открывается подробная информация
+        tvEquipmentList.setOnMouseClicked(event -> {
+            if (event.getClickCount() == 2) {
+                Equipment selectedEquipment = tvEquipmentList.getSelectionModel().getSelectedItem();
+                if (selectedEquipment != null) {
+                    formService.loadSelectedEquipmentForm(selectedEquipment);
+                }
             }
         });
     }

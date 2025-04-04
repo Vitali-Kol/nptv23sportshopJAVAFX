@@ -14,7 +14,7 @@ public class SpringFXMLLoader {
 
     public FXMLLoader load(String fxmlPath) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxmlPath));
-        fxmlLoader.setControllerFactory(applicationContext::getBean); // Получение контроллера через Spring
+        fxmlLoader.setControllerFactory(applicationContext::getBean);
         return fxmlLoader;
     }
 }

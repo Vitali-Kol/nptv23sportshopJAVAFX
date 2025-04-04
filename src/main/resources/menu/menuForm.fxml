@@ -44,7 +44,7 @@
                 </Menu>
                 <Menu text="Пользователь">
                     <items>
-                        <MenuItem onAction="#showLoginForm" text="Вход" />
+                        <MenuItem onAction="#showChangePasswordForm" text="Изменить пароль" />
                         <MenuItem onAction="#logout" text="Выход" />
                     </items>
                 </Menu>
