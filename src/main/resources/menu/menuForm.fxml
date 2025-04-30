@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="vbMenuFormRoot" prefHeight="45.0" prefWidth="599.0"
+      xmlns="http://javafx.com/javafx/23.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="org.example.kolesnikovsport_shop.controller.MenuFormController">
+    <children>
+        <MenuBar>
+            <menus>
+                <Menu text="Оборудование" fx:id="menuEquipment">
+                    <items>
+                        <MenuItem onAction="#showEquipmentForm" text="Добавить оборудование" fx:id="miAddEquipment"/>
+                        <MenuItem onAction="#showEquipmentList" text="Список оборудования" fx:id="miListEquipment"/>
+                    </items>
+                </Menu>
+                <Menu text="Поставщики" fx:id="menuSuppliers">
+                    <items>
+                        <MenuItem onAction="#showSupplierForm" text="Добавить поставщика" fx:id="miAddSupplier"/>
+                        <MenuItem onAction="#showSupplierList" text="Список поставщиков" fx:id="miListSuppliers"/>
+                    </items>
+                </Menu>
+                <Menu text="Покупатели" fx:id="menuCustomers">
+                    <items>
+                        <MenuItem onAction="#showNewCustomerForm" text="Добавить покупателя" fx:id="miAddCustomer"/>
+                        <MenuItem onAction="#showCustomerListForm" text="Список покупателей" fx:id="miListCustomers"/>
+                    </items>
+                </Menu>
+                <Menu text="Покупка">
+                    <items>
+                        <MenuItem onAction="#showPurchaseForm" text="Купить товар"/>
+                        <MenuItem onAction="#showIncomeForm" text="Доход магазина"/>
+                        <MenuItem onAction="#showRatingForm" text="Рейтинг товаров"/>
+                    </items>
+                </Menu>
+                <Menu fx:id="menuAdministrator" text="Administrator">
+                    <items>
+                        <MenuItem onAction="#someAdminFunction" text="Админ. функция"/>
+                    </items>
+                </Menu>
+                <Menu text="Пользователь">
+                    <items>
+                        <MenuItem onAction="#showChangePasswordForm" text="Изменить пароль"/>
+                        <MenuItem onAction="#logout" text="Выход"/>
+                        <MenuItem onAction="#showLoginForm" text="Войти"/>
+                        <MenuItem text="Открыть чат" onAction="#showChatForm"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <Label alignment="CENTER" prefHeight="17.0" prefWidth="600.0" />
+    </children>
+</VBox>
